@@ -14,7 +14,21 @@ export default function HomeScreen() {
   useEffect(() =>{
   socket.current =  io("http://192.168.1.3:3001")
   socket.current.on('message',message =>{
-      setRecvMessages(prevState=> [...prevState,message])
+
+    const testMessage =  {
+        _id: 3,
+        text: 'Hello from myself',
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar: 'https://placeimg.com/140/140/any',
+        }
+    }
+
+    testMessage.text = message
+      
+      setRecvMessages(prevState=> GiftedChat.append(prevState,testMessage))
 
   })
 
@@ -22,7 +36,7 @@ export default function HomeScreen() {
   setRecvMessages([
     {
       _id: 1,
-      text: 'Hello developer',
+      text: 'Hello from myself',
       createdAt: new Date(),
       user: {
         _id: 2,
@@ -33,9 +47,10 @@ export default function HomeScreen() {
   ])
 },[])
 
-  const sendMessage  = () => {
-      socket.current.emit('message',messageToSend)
-      setmessageToSend("")
+  const onSend = (messages) => {
+      console.log(messages)
+      socket.current.emit('message',messages[0].text)
+      //setmessageToSend("")
 
 
   }
@@ -46,7 +61,7 @@ export default function HomeScreen() {
     //<View style={styles.container}>
     <GiftedChat
       messages={recvMessages}
-     // onSend={messages => onSend(messages)}
+      onSend={messages => onSend(messages)}
       user={{
         _id: 1,
       }}
