@@ -1,17 +1,30 @@
 
 import { StatusBar } from 'expo-status-bar';
-import React,{useEffect} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React,{useEffect, useState,useRef} from 'react';
+import { StyleSheet, Text, View,TextInput } from 'react-native';
 import io from 'socket.io-client'
 
-export default function App() {
+export default function HomeScreen() {
 
-  useEffect(function(){
-    io("http://192.168.1.3:3001")
+    const [messageToSend,setmessageToSend] = useState('')
+    const socket = useRef(null)
+
+  useEffect(() =>{
+  socket.current =  io("http://192.168.1.3:3001")
   },[])
+
+  const sendMessage  = () => {
+      socket.current.emit('message',messageToSend)
+      setmessageToSend("")
+
+
+  }
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>Hola</Text>
+      <TextInput value={messageToSend} onChangeText={
+          (text) =>setmessageToSend(text)
+      } placeholder='enter chat message'  onSubmitEditing={sendMessage}></TextInput>
       <StatusBar style="auto" />
     </View>
   );
