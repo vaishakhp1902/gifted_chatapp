@@ -14,9 +14,10 @@ io.on("connection", socket => {
   users[socket.id] = {userId: currentUserId++}
   socket.on('join',username=>{
     users[socket.id].username = username
+    messageHandler.handleMessage(socket,users)
    
   })
-  messageHandler.handleMessage(socket,users)
+  
 });
 
 io.listen(3001);
