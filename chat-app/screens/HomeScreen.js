@@ -36,17 +36,23 @@ export default function HomeScreen() {
 
   }
 
+  const joinChat = username => {
+    socket.current.emit('join',username)
+    setHasJoined(true)
+  }
+
 
 
   return (
     <View style={{flex:1}}>
     {hasJoined ?  <GiftedChat
+      renderUsernameOnMessage
       messages={recvMessages}
       onSend={messages => onSend(messages)}
       user={{
         _id: 1,
       }}
-    /> : <JoinScreen/>}
+    /> : <JoinScreen joinChat={joinChat}/>}
    
   </View>
   );
